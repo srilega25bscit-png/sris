@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Box</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search anything...">
+    <button onclick="sendSearch()">Search</button>
+</div>
+
+<script>
+async function sendSearch() {
+    const query = document.getElementById("searchInput").value.trim();
+
+    if (!query) {
+        alert("Please enter a search term");
+        return;
+    }
+
+    try {
+        await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                search_query: query,
+                submitted_at: new Date().toISOString()
+            })
+        });
+
+        alert("Search submitted!");
+
+        // Optional: redirect to Google search results
+        window.open(
+            "https://www.google.com/search?q=" +
+            encodeURIComponent(query),
+            "_blank"
+        );
+
+    } catch (error) {
+        console.error(error);
+        alert("Failed to submit search");
+    }
+}
+</script>
+
+</body>
+</html>
